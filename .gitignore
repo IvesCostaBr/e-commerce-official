@@ -1,2 +1,5 @@
-venv/
+venv
 *.sqlite3
+/venv/
+/venv
+venv/
