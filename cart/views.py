@@ -6,9 +6,6 @@ from .models import Carrinho
 # Create your views here.
 
 def carrinho(request):
-    if (Carrinho.objects.new_or_get(request)):
-        message = 'carrinho já criado'
+    cart = Carrinho.objects.get(id=Carrinho.objects.new_or_get(request).id)
     
-    
-
-    return render(request, 'carrinho.html', {'message': message})
+    return render(request, 'carrinho.html', {'carrinho': cart})

@@ -2,4 +2,4 @@ venv
 *.sqlite3
 /venv/
 /venv
-venv/
+venv/git
