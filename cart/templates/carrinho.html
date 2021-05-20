@@ -8,12 +8,12 @@
     <title>Document</title>
 </head>
 <body>
-
+{{ produtos }}
     <div class="container">
         <div class="row">
-            {% for c in carrinho.produtos.all  %}
+            {% for c in produtos  %}
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{c.produto.titulo}}  QTD: {{ c.qtd }} X  Valor: {{ c.total_por_item }}</li>
+                <li class="list-group-item">{{c.titulo}}  QTD: {{ c.qtd }} X  Valor: {{ c.total_por_item }}</li>
             </ul>
             {% empty %}
             <h3>Carrinho vazio!</h3>

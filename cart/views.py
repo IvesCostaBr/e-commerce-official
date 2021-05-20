@@ -7,5 +7,6 @@ from .models import Carrinho
 
 def carrinho(request):
     cart = Carrinho.objects.get(id=Carrinho.objects.new_or_get(request).id)
-    
-    return render(request, 'carrinho.html', {'carrinho': cart})
+    produtos = cart.produtos.all()
+    print(produtos)
+    return render(request, 'carrinho.html', {'carrinho': cart, 'produtos':produtos}) 

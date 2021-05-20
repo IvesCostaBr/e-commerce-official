@@ -47,16 +47,6 @@ class Carrinho(models.Model):
     subtotal = models.DecimalField(decimal_places=2, max_digits=5, null=True, blank=True, default=0.00)
 
     objects = CartManager()
-
-    def calculo_subtotal(self):
-        total = 0
-        items = self.produtos.all()
-        for c in range(items.count()):
-            total = total + items[c].total_por_item
-
-        print('entrou no canculo')
-
-        Carrinho.objects.update(subtotal=total)
     
     def __str__(self):
         return str(self.id )+ '  ' + str(self.user)
