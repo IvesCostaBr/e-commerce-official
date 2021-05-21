@@ -1,32 +1,123 @@
-<!DOCTYPE html>
+{% load static %}
+
+
 <html lang="en">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
 <body>
-{{ produtos }}
     <div class="container">
         <div class="row">
-            {% for c in produtos  %}
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{c.titulo}}  QTD: {{ c.qtd }} X  Valor: {{ c.total_por_item }}</li>
-            </ul>
-            {% empty %}
-            <h3>Carrinho vazio!</h3>
-            {% endfor %}  
+               
+  
+          
             <h3>SUBTOTAL : {{ carrinho.subtotal }}</h3>
         </div>
     </div>
-    
-        
-    
-
-   
-
-    
 </body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'cart_page.css' %}">
+  <title>Carrinho | Loja</title>
+</head>
+
+<body>
+  <main>
+    <div class="basket">
+      <div class="basket-module">
+        <label for="promo-code">Digite o cupom de desconto.</label>
+        <input id="promo-code" type="text" name="promo-code" maxlength="5" class="promo-code-field">
+        <button class="promo-code-cta">Aplicar</button>
+      </div>
+      <div class="basket-labels">
+        <ul>
+          <li class="item item-heading">Item</li>
+          <li class="price">Preço</li>
+          <li class="quantity">Quantidade</li>
+          <li class="subtotal">Subtotal</li>
+        </ul>
+      </div>
+      <div class="basket-product">
+        <div class="item">
+            {% for c in produtos  %}
+            <ul class="list-group list-group-flush">
+               
+                <form method="POST" action="{% url 'change_qtd' c.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="product-image">
+                        <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTPtIW2IhRJ-sp_Ug56pfs8pvNhsfoCCRyd2K_v1e-61-ObRB0W5FUEZQAhmqUO4JHzmdmdE0lp5w&usqp=CAc" alt="Placholder Image 2" class="product-frame">
+                    </div>
+                    <li>{{c.produto.titulo}}</li>
+                    <div class="price">{{ c.produto.preco }}</div>
+
+                    <div class="quantity">
+                        <input class="quantity-field" min="0" name="qtd" type="number" value="{{ c.qtd }}">
+                    </div>
+
+                    <div class="subtotal">
+                        {{ c.total_por_item }}
+                    </div>
+
+                    <div class="remove">
+                        <button>Remove</button>
+                    </div>
+                    <button type="submit">Alterar Quantidade</button>
+                </form>
+            </ul>    
+            {% empty %}
+                <h3>Carrinho vazio!</h3>
+            {% endfor %}  
+        </div>
+        
+      </div>
+    </div>
+    <aside>
+      <div class="summary">
+        <div class="summary-total-items"><span class="total-items"></span> Items no seu carrinho</div>
+        <div class="summary-subtotal">
+          <div class="subtotal-title">Subtotal</div>
+          <div class="subtotal-value final-value" id="basket-subtotal">{{ carrinho.subtotal }}</div>
+          <div class="summary-promo hide">
+            <div class="promo-title">Promoção</div>
+            <div class="promo-value final-value" id="basket-promo"></div>
+          </div>
+        </div>
+        <div class="summary-delivery">
+          <select name="delivery-collection" class="summary-delivery-selection">
+            <option Placholder='Opções de entrega'></option>
+            <option value="collection">Collection</option>
+            <option value="first-class">Royal Mail 1st Class</option>
+            <option value="second-class">Royal Mail 2nd Class</option>
+            <option value="signed-for">Royal Mail Special Delivery</option>
+          </select>
+        </div>
+        <div class="summary-total">
+          <div class="total-title">Total</div>
+          <div class="total-value final-value" id="basket-total">{{ carrinho.subtotal }}</div>
+        </div>
+        <div class="summary-checkout">
+          <button class="checkout-cta">Processar Venda</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+
+
+ <!--  SCRIPTS--> 
+</body>
+
 </html>

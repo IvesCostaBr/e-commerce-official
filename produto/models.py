@@ -9,4 +9,4 @@ class Produto(models.Model):
     preco = models.DecimalField(decimal_places=2, max_digits=6)
 
     def __str__(self):
-        return str(self.id)  + '  ' + str(self.titulo) + f'  Preco:{self.preco}'
+        return  str(self.id) + ' ' + str(self.titulo)
