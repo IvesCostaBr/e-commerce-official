@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     #myapss
     'produto',
     'cart',
+    'loja',
+    'order',
 ]
 
 MIDDLEWARE = [
@@ -47,7 +49,7 @@ ROOT_URLCONF = 'e_commerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -61,6 +63,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'e_commerce.wsgi.application'
+ASGI_APPLICATION = ''
 
 
 # Database

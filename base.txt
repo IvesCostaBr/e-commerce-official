@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block link %}
+ 
+{% endblock %}
+
+{% block title %}
+{% endblock  %}
+
+{% block main %}
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}

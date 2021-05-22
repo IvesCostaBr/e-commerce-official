@@ -1,6 +1,5 @@
 from django.db import models
-from django.db.models import  Sum, FloatField
-from django.conf import settings
+from django.db.models import  Sum
 from produto.models import Produto
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save
@@ -29,18 +28,16 @@ class CartManager(models.Manager):
                 user_obj = user
         return self.model.objects.create(user = user_obj)
 
-    def calculo_subtotal(self):
-        total = 0.00
-        subtotal = self.model.produtos.through.itemcarrinho.get_queryset().aggregate(Sum('total_por_item'))['total_por_item__sum']
-        if subtotal < 0:
-            self.model.objects.update(subtotal=0.00)
-        else:
-            self.model.objects.update(subtotal=subtotal)
-
     def deletar_carrinho(self,id_cart):
         self.model.objects.get(id=id_cart).delete()
    
+class CupomDesconto(models.Model):
+    owner =  models.OneToOneField(User, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=30)
+    valor = models.FloatField(default=0)
 
+    def  __str__(self):
+        return str(self.titulo) + ' ' + str(self.valor)
 
 class ItemCarrinho(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE,blank=True, null=True)
@@ -51,48 +48,62 @@ class ItemCarrinho(models.Model):
         return  f' {self.id} PRODUTO:{self.produto} QTD:{self.qtd} TOTAL:{self.total_por_item}'
 
     def total_item(self):
-        
-        if self.qtd <= 0 or self.total_por_item <= 0:
+        if self.qtd <= 0 or self.total_por_item <= 0.00:
             item = ItemCarrinho.objects.get(id=self.id)
-            print(item)
-            print(Carrinho.objects.get(produtos=self))
+            
         
         total = self.produto.preco * self.qtd
         ItemCarrinho.objects.filter(id=self.id).update(total_por_item=total)
-
-  
-
-#TODO:Achar solução mais viavel (Metodo mais eficaz de calcular todo)
-
+#Mecher no subotoal e criar uma variavel total
 class Carrinho(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     produtos = models.ManyToManyField(ItemCarrinho,  blank=True)
-    subtotal = models.DecimalField(decimal_places=2, max_digits=5, null=True, blank=True, default=0.00)
-
+    subtotal = models.FloatField(default=0.00)
+    cupom = models.OneToOneField(CupomDesconto, on_delete=models.CASCADE, blank=True, null=True)
+    
     objects = CartManager()
 
-    #def calculo_subtotal(self):
-    #    total = 0.00
-    #    qtd = self.produtos.values('total_por_item')[0]
-    #    for c in  range(self.produtos.count):
-    #        total = total + qtd['total_por_item']
+    def calculo_subtotal(self):
+        subtotal = self.produtos.all().aggregate(Sum('total_por_item'))['total_por_item__sum']
+        if subtotal == None:
+            subtotal = 0.00
+        if subtotal <= 0:
+            Carrinho.objects.update(subtotal=0.00)
+        else:
+            if self.cupom:
+                subtotal = subtotal - self.cupom.valor
+                Carrinho.objects.update(subtotal=float(subtotal))
+            else:
+                Carrinho.objects.update(subtotal=float(subtotal))
+                
+    def aplicar_cupom(self):
+        self.calculo_subtotal()
 
-    #    Carrinho.objects.update(subtotal=total)
-    
     def __str__(self):
         return str(self.id )+ '  ' + str(self.user)
 
+#TODO:Corrigir o valor total: Valor antes do descnto e depois do desconto
 
+#TODO:Melhorar a função de remover um item especifico do carrinho.
 
 @receiver(post_save, sender=ItemCarrinho)
 def calculo_item(sender, instance, **kwargs):
     instance.total_item() 
-
+#TODO:Possibilidade de remove sginals de post_delete do item carrinho.
 @receiver(post_delete, sender=ItemCarrinho)
 def deletar_item(sender, instance, **kwargs):
     instance.total_item() 
 
 @receiver(post_delete, sender=Carrinho.produtos.through)
-def deletar_item(sender, instance, **kwargs):
-    instance.calcular_subtotal()
+def deletar_item_cart(sender, instance, **kwargs):
+    instance.calculo_subtotal()
+
+@receiver(post_save, sender=Carrinho.produtos.through)
+def add_item_cart(sender, instance, **kwargs):
+    instance.calculo_subtotal()
+  
+@receiver(m2m_changed, sender=Carrinho.produtos.through)
+def add_item_cart(sender, instance, **kwargs):
+    instance.calculo_subtotal()
+  
   
