@@ -1,0 +1,46 @@
+Metadata-Version: 2.1
+Name: django-pagseguro2
+Version: 3.0.0
+Summary: Integração da API v2 do PagSeguro com o Django.
+Home-page: https://github.com/allisson/django-pagseguro2
+Author: Allisson Azevedo
+Author-email: allisson@gmail.com
+License: MIT
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: Django (>=2.2)
+Requires-Dist: requests
+Requires-Dist: python-dateutil
+Requires-Dist: xmltodict
+
+django-pagseguro2
+=================
+
+Integração da API v2 do PagSeguro com o Django.
+
+.. image:: https://github.com/allisson/django-pagseguro2/workflows/tests/badge.svg
+    :target: https://github.com/allisson/django-pagseguro2/actions
+
+.. image:: https://img.shields.io/pypi/v/django-pagseguro2.svg
+        :target: https://pypi.python.org/pypi/django-pagseguro2
+        :alt: Latest Version
+
+.. image:: https://img.shields.io/github/license/allisson/django-pagseguro2.svg
+        :target: https://pypi.python.org/pypi/django-pagseguro2
+        :alt: License
+
+.. image:: https://img.shields.io/pypi/pyversions/django-pagseguro2.svg
+        :target: https://pypi.python.org/pypi/django-pagseguro2
+        :alt: Supported Python versions
+
+- `Documentação <http://django-pagseguro-2.readthedocs.org/>`_
+- `Aplicação de exemplo <https://github.com/allisson/django-pagseguro2-example/>`_
+
+

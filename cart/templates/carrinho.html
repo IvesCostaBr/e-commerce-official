@@ -122,10 +122,10 @@
               <div>
                 <strong>Total do Pedido</strong>
                 <strong>
-                  <p class="mb-0">(including VAT)</p>
+                  <p class="mb-0">(já com os descontos)</p>
                 </strong>
               </div>
-              <span><strong>R$ {{ carrinho.subtotal }}</strong></span>
+              <span><strong>R$ {{ carrinho.total }}</strong></span>
             </li>
           </ul>
           <a type="button" href="{% url 'checkout' %}" class="btn btn-primary btn-block waves-effect waves-light">Finalizar Compra</a>

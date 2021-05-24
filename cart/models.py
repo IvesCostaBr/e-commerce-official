@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import  Sum
+from django.db.models import  Sum, F, FloatField
 from produto.models import Produto
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save
@@ -48,17 +48,19 @@ class ItemCarrinho(models.Model):
         return  f' {self.id} PRODUTO:{self.produto} QTD:{self.qtd} TOTAL:{self.total_por_item}'
 
     def total_item(self):
-        if self.qtd <= 0 or self.total_por_item <= 0.00:
-            item = ItemCarrinho.objects.get(id=self.id)
-            
-        
-        total = self.produto.preco * self.qtd
-        ItemCarrinho.objects.filter(id=self.id).update(total_por_item=total)
+        try:
+            total = self.produto.preco * self.qtd
+            ItemCarrinho.objects.filter(id=self.id).update(total_por_item=total)
+        except:
+            return None
+     
+
 #Mecher no subotoal e criar uma variavel total
 class Carrinho(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     produtos = models.ManyToManyField(ItemCarrinho,  blank=True)
     subtotal = models.FloatField(default=0.00)
+    total = models.FloatField(default=0.00)
     cupom = models.OneToOneField(CupomDesconto, on_delete=models.CASCADE, blank=True, null=True)
     
     objects = CartManager()
@@ -71,10 +73,10 @@ class Carrinho(models.Model):
             Carrinho.objects.update(subtotal=0.00)
         else:
             if self.cupom:
-                subtotal = subtotal - self.cupom.valor
-                Carrinho.objects.update(subtotal=float(subtotal))
+                total = subtotal - self.cupom.valor
+                Carrinho.objects.update(subtotal=float(subtotal), total=float(total))
             else:
-                Carrinho.objects.update(subtotal=float(subtotal))
+                Carrinho.objects.update(subtotal=float(subtotal), total=float(subtotal))
                 
     def aplicar_cupom(self):
         self.calculo_subtotal()
