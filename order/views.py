@@ -25,12 +25,18 @@ class Pagseguro(RedirectView):
         return pg['redirect_url']
     
 
-
-
 @csrf_exempt
 def pagseguro_notification(request):
     code = request.POST.get('notificationCode', None)    
     return HttpResponse(code)
+
+
+def detail_order(request):
+    code1 = request.POST.get('id_transaction',None)
+    code2 = request.GET.get('id_transaction',None)
+    print(code1, code2)
+
+    return render(request, 'order_detail.html')
 
         
     
