@@ -11,5 +11,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include(cart_urls)),
     path('', include(loja_urls)),
-    path('pagseguro/', include('pagseguro.urls')),
+    path('retorno/pagseguro/', include('pagseguro.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
