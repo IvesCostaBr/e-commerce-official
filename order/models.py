@@ -7,13 +7,28 @@ from pagseguro.signals import notificacao_recebida
 import uuid
 
 
-
-# Create your models here.
-
-
 def generate_code():
     return uuid.uuid4()
 
+class OrderManager(models.Manager):
+    def create_order(self, cart):
+        order = self.create(comprador=cart.user,
+        valor_total=cart.subtotal)
+        order.all_produtos.set(cart.produtos.all())
+        return order
+
+    def update_order(self, pagseguro_transaction):
+        status = {
+            '3':'Pago',
+            '7':'Cancelado',
+        }
+
+        order = self.filter(id=pagseguro_transaction['reference']).first()
+        if not order:
+            return
+        print('venda atualizada')
+        
+        
 
 class Order(models.Model):
     STATUS_CHOICES = (
@@ -33,8 +48,10 @@ class Order(models.Model):
     status = models.IntegerField('Situação', choices=STATUS_CHOICES, default=0, blank=True)
     payment_method = models.CharField('opção de pagamento', choices=PAYMENT_OPTION_CHOICES, max_length=20, default='deposit')
     all_produtos = models.ManyToManyField(ItemCarrinho, blank=True)
-    cod_pagamento = models.CharField(max_length=30,blank=True, null=True)
+    cod_pagamento = models.CharField(max_length=50,blank=True, null=True)
     valor_total = models.FloatField(default=0.00)
+
+    objects = OrderManager()
 
     def __str__(self):
         return str(self.id) + ' '+ str(self.comprador)
@@ -55,7 +72,7 @@ class Order(models.Model):
 
 
 def update_purchase_status(sender, transaction, **kwargs):
-    print('pedido atualizado')
+    Order.objects.update_order(transaction)
 
 
 notificacao_recebida.connect(update_purchase_status)
