@@ -45,8 +45,10 @@ class Order(models.Model):
     )
     id = models.UUIDField(primary_key=True, editable=False, default=generate_code)
     comprador = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    status = models.IntegerField('Situação', choices=STATUS_CHOICES, default=0, blank=True)
     payment_method = models.CharField('opção de pagamento', choices=PAYMENT_OPTION_CHOICES, max_length=20, default='deposit')
     all_produtos = models.ManyToManyField(ItemCarrinho, blank=True)
+    cod_pagamento = models.CharField(max_length=50,blank=True, null=True)
     valor_total = models.FloatField(default=0.00)
 
     objects = OrderManager()
