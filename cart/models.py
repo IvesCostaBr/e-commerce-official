@@ -64,7 +64,7 @@ class Carrinho(models.Model):
     cupom = models.OneToOneField(CupomDesconto, on_delete=models.CASCADE, blank=True, null=True)
     
     objects = CartManager()
-
+#TODO:ajeiar o calculo do total
     def calculo_subtotal(self):
         subtotal = self.produtos.all().aggregate(Sum('total_por_item'))['total_por_item__sum']
         if subtotal == None:

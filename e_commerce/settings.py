@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'order',
     'costumer',
     'pagseguro',
+
     
 ]
 

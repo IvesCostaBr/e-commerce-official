@@ -12,3 +12,6 @@ class Produto(models.Model):
 
     def __str__(self):
         return  str(self.id) + ' ' + str(self.titulo)
+
+class Caregoria(models.Model):
+    pass

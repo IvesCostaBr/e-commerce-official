@@ -17,7 +17,7 @@ urlpatterns = [
     path('remove_item/<int:item>/',remove_item_in_cart, name='remove_item'),
     path('remover_cupom/<int:cupom>/', remover_cupom, name='cupom_remove'),
     path('add_to_cart/<int:item>/<int:qtd>/', add_to_cart, name='add_to_cart'),
-    path('chekout', include(order_urls)),
+    path('', include(order_urls)),
 
    
 ]

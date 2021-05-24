@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-8 order-md-1">
           <h4 class="mb-3">Endereço de cobrança</h4>
-          <form  method="post" action="{% url 'pagseguro_payment' %}" enctype="multipart/form-data" class="needs-validation" novalidate>
+          <form  method="post" action="{% url 'pagseguro_payment' cart.id %}" enctype="multipart/form-data" class="needs-validation" novalidate>
               {% csrf_token %}
             
             <div class="row">

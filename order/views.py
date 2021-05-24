@@ -3,7 +3,8 @@ from django.views.generic import TemplateView, RedirectView
 from cart.models import Carrinho
 from .models import Order
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import csrf_exempts
+
 
 class Chekout(TemplateView):
     template_name = 'checkout.html'
@@ -15,8 +16,6 @@ class Chekout(TemplateView):
         return context
 
     
-
-
 class Pagseguro(RedirectView):
     def get_redirect_url(self, *args, **kwargs): 
         cart = Carrinho.objects.get(id=self.request.session.get('cart_id'))
@@ -25,15 +24,13 @@ class Pagseguro(RedirectView):
             valor_total=cart.subtotal,
             )
         order.all_produtos.set(cart.produtos.all())
-        cart.delete()
         pg = order.pagseguro()
-        url = (pg['redirect_url'])
-        return url
+        order.cod_pagamento = pg['code']
+        order.save()
 
+        return pg['redirect_url']
+        
 
-@csrf_exempt
-def pagseguro_notification(request):
-    code = request.POST['notificationCode' or None]
-    print(code)
+        
     
-    return HttpResponse('OK')
+
