@@ -3,12 +3,14 @@
 
 Para rodar o projeto deve ser criado uma virtual env com o comando python3 -m venv venv na raiz do projeto.
 
-Depois para ativar a venv bastar digitar na raiz do projeto sourcer ./venv/bin/activate 
+Depois para ativar a venv bastar digitar na raiz do projeto sourcer 
+
+<code>./venv/bin/activate </code>
 
 Depois instalar as depências
 
-pip install -r requirements.txt
+<code>pip install -r requirements.txt</code>
 
 depois só rodar a app
 
-python3 manage.py runserver
+<code>python3 manage.py runserver</code>
