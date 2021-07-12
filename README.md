@@ -1,7 +1,7 @@
 # e-commerce-official
 
 
-Para rodar o projeto deve ser criado uma virtual env com o comando python3 -m venv venv na raiz do projeto.
+Para rodar o projeto deve ser criado uma virtual env com o comando <code>>python3 -m venv venv</code> na raiz do projeto.
 
 Depois para ativar a venv bastar digitar na raiz do projeto sourcer 
 
